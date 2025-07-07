@@ -1,0 +1,16 @@
+body {
+  scroll-behavior: smooth;
+}
+
+.card img {
+  object-fit: cover;
+  height: 250px;
+}
+
+footer {
+  font-size: 0.9rem;
+}
+
+img {
+  pointer-events: auto;
+}
