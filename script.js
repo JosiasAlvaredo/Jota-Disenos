@@ -36,7 +36,7 @@ function agregarAlCarrito() {
   if (!productoActual) return alert("Seleccioná un producto.");
   carrito.push(productoActual);
   actualizarContador();
-  alert(`✅ "${productoActual.titulo}" agregado al carrito.`);
+  alert(`"${productoActual.titulo}" agregado al carrito.`);
 }
 
 function actualizarContador() {
@@ -88,14 +88,14 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
   if (!nombre || !gmail) return alert("Completá tus datos.");
   if (carrito.length === 0) return alert("El carrito está vacío.");
 
-  let mensaje = `¡Hola! Soy *${nombre}* y quiero hacer un pedido.\n`;
-  mensaje += `📧 Gmail: ${gmail}\n\n🛍️ Productos:\n`;
+  let mensaje = `Hola, soy ${nombre} y quiero hacer un pedido.\n`;
+  mensaje += `Gmail: ${gmail}\n\nProductos:\n`;
   let total = 0;
   carrito.forEach((item, i) => {
     mensaje += `${i + 1}. ${item.titulo} - $${item.precio}\n`;
     total += item.precio;
   });
-  mensaje += `\n💰 Total: $${total}`;
+  mensaje += `\nTotal: $${total}`;
   const numero = "5493516175353";
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
@@ -104,6 +104,5 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
 document.addEventListener('contextmenu', function (e) {
   if (e.target.tagName === 'IMG') {
     e.preventDefault();
-    alert("😅 No se puede descargar esta imagen");
   }
 });
