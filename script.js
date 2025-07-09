@@ -1,54 +1,87 @@
-let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+let carrito = [];
+let productoActual = null;
 
-function agregarAlCarrito(nombre, precio) {
-  carrito.push({ titulo: nombre, precio: precio });
-  localStorage.setItem('carrito', JSON.stringify(carrito));
-  alert(`✅ "${nombre}" agregado al carrito.`);
+function mostrarDetalle(titulo, descripcion, imagenes, precio) {
+  productoActual = { titulo, descripcion, imagenes, precio };
+  document.getElementById('detalleTitulo').textContent = titulo;
+  document.getElementById('detalleDescripcion').textContent = descripcion;
+  document.getElementById('detallePrecio').textContent = `$${precio}`;
+
+  const carouselInner = document.getElementById('carouselInner');
+  carouselInner.innerHTML = '';
+  imagenes.forEach((url, i) => {
+    const div = document.createElement('div');
+    div.className = i === 0 ? 'carousel-item active' : 'carousel-item';
+    const img = document.createElement('img');
+    img.src = url;
+    img.className = 'd-block w-100 rounded';
+    div.appendChild(img);
+    carouselInner.appendChild(div);
+  });
+
+  document.getElementById('productos').style.display = 'none';
+  document.getElementById('producto-detalle').style.display = 'block';
+  document.getElementById('carrito').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function volverAlCatalogo() {
+  productoActual = null;
+  document.getElementById('producto-detalle').style.display = 'none';
+  document.getElementById('productos').style.display = 'block';
+  document.getElementById('carrito').style.display = 'none';
+}
+
+function agregarAlCarrito() {
+  if (!productoActual) return alert("Seleccioná un producto.");
+  carrito.push(productoActual);
   actualizarContador();
+  alert(`✅ "${productoActual.titulo}" agregado al carrito.`);
 }
 
 function actualizarContador() {
-  const contador = document.getElementById("carritoCantidad");
-  if (contador) contador.textContent = carrito.length;
-}
-
-function vaciarCarrito() {
-  if (confirm("¿Vaciar todo el carrito?")) {
-    carrito = [];
-    localStorage.removeItem('carrito');
-    mostrarCarrito();
-  }
-}
-
-function eliminarDelCarrito(index) {
-  carrito.splice(index, 1);
-  localStorage.setItem('carrito', JSON.stringify(carrito));
-  mostrarCarrito();
+  document.getElementById('carritoCantidad').textContent = carrito.length;
 }
 
 function mostrarCarrito() {
+  document.getElementById('productos').style.display = 'none';
+  document.getElementById('producto-detalle').style.display = 'none';
+  document.getElementById('carrito').style.display = 'block';
+  actualizarVistaCarrito();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function actualizarVistaCarrito() {
   const lista = document.getElementById('listaCarrito');
   const totalSpan = document.getElementById('totalCarrito');
-  if (!lista || !totalSpan) return;
-
   lista.innerHTML = '';
   let total = 0;
-  carrito.forEach((item, i) => {
+  carrito.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `${item.titulo} - $${item.precio} <button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${i})">❌</button>`;
+    li.innerHTML = `${item.titulo} - $${item.precio}
+      <button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${index})">❌</button>`;
     lista.appendChild(li);
     total += item.precio;
   });
   totalSpan.textContent = total;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function eliminarDelCarrito(index) {
+  carrito.splice(index, 1);
   actualizarContador();
-  mostrarCarrito();
-});
+  actualizarVistaCarrito();
+}
 
-document.getElementById('pedidoForm')?.addEventListener('submit', function (e) {
+function vaciarCarrito() {
+  if (confirm("¿Vaciar todo el carrito?")) {
+    carrito = [];
+    actualizarContador();
+    actualizarVistaCarrito();
+  }
+}
+
+document.getElementById('pedidoForm').addEventListener('submit', function (e) {
   e.preventDefault();
   const nombre = document.getElementById('nombreInput').value.trim();
   const gmail = document.getElementById('gmailInput').value.trim();
@@ -66,4 +99,11 @@ document.getElementById('pedidoForm')?.addEventListener('submit', function (e) {
   const numero = "5493516175353";
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
+});
+
+document.addEventListener('contextmenu', function (e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+    alert("😅 No se puede descargar esta imagen");
+  }
 });

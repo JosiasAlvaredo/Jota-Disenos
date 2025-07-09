@@ -2,6 +2,13 @@ body {
   scroll-behavior: smooth;
 }
 
+header {
+  background-image: url("https://via.placeholder.com/1200x400?text=Banner+Diseño");
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
 .card img {
   object-fit: cover;
   height: 250px;
