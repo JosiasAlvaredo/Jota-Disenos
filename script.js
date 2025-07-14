@@ -1,3 +1,23 @@
+// Cargar fragmentos HTML
+function incluirHTML(id, archivo) {
+  fetch(archivo)
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById(id).innerHTML = html;
+    })
+    .catch(err => console.error(`Error al cargar ${archivo}:`, err));
+}
+
+// Fragmentos a insertar
+window.addEventListener('DOMContentLoaded', () => {
+  incluirHTML('navbar', './partials/navbar.html');
+  incluirHTML('footer', './partials/footer.html');
+  incluirHTML('productos', './partials/productos.html');
+  incluirHTML('detalle', './partials/detalle.html');
+  incluirHTML('carrito', './partials/carrito.html');
+});
+
+// Funcionalidad de la tienda
 let carrito = [];
 let productoActual = null;
 
@@ -40,7 +60,8 @@ function agregarAlCarrito() {
 }
 
 function actualizarContador() {
-  document.getElementById('carritoCantidad').textContent = carrito.length;
+  const contador = document.getElementById('carritoCantidad');
+  if (contador) contador.textContent = carrito.length;
 }
 
 function mostrarCarrito() {
@@ -54,6 +75,7 @@ function mostrarCarrito() {
 function actualizarVistaCarrito() {
   const lista = document.getElementById('listaCarrito');
   const totalSpan = document.getElementById('totalCarrito');
+  if (!lista || !totalSpan) return;
   lista.innerHTML = '';
   let total = 0;
   carrito.forEach((item, index) => {
@@ -81,26 +103,29 @@ function vaciarCarrito() {
   }
 }
 
-document.getElementById('pedidoForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  const nombre = document.getElementById('nombreInput').value.trim();
-  const gmail = document.getElementById('gmailInput').value.trim();
-  if (!nombre || !gmail) return alert("Completá tus datos.");
-  if (carrito.length === 0) return alert("El carrito está vacío.");
+document.addEventListener('submit', function (e) {
+  if (e.target.id === 'pedidoForm') {
+    e.preventDefault();
+    const nombre = document.getElementById('nombreInput')?.value.trim();
+    const gmail = document.getElementById('gmailInput')?.value.trim();
+    if (!nombre || !gmail) return alert("Completá tus datos.");
+    if (carrito.length === 0) return alert("El carrito está vacío.");
 
-  let mensaje = `¡Hola! Soy *${nombre}* y quiero hacer un pedido.\n`;
-  mensaje += `📧 Gmail: ${gmail}\n\n🛍️ Productos:\n`;
-  let total = 0;
-  carrito.forEach((item, i) => {
-    mensaje += `${i + 1}. ${item.titulo} - $${item.precio}\n`;
-    total += item.precio;
-  });
-  mensaje += `\n💰 Total: $${total}`;
-  const numero = "5493516175353";
-  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-  window.open(url, "_blank");
+    let mensaje = `¡Hola! Soy *${nombre}* y quiero hacer un pedido.\n`;
+    mensaje += `📧 Gmail: ${gmail}\n\n🛍️ Productos:\n`;
+    let total = 0;
+    carrito.forEach((item, i) => {
+      mensaje += `${i + 1}. ${item.titulo} - $${item.precio}\n`;
+      total += item.precio;
+    });
+    mensaje += `\n💰 Total: $${total}`;
+    const numero = "5493516175353";
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, "_blank");
+  }
 });
 
+// Bloquear clic derecho en imágenes
 document.addEventListener('contextmenu', function (e) {
   if (e.target.tagName === 'IMG') {
     e.preventDefault();

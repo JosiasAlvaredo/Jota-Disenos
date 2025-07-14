@@ -1,0 +1,20 @@
+<section id="carrito" class="container py-5" style="display:none;">
+  <button class="btn btn-secondary mb-4" onclick="volverAlCatalogo()">← Volver al catálogo</button>
+  <h2 class="mb-4">🛒 Carrito de compras</h2>
+  <ul id="listaCarrito" class="list-group mb-3"></ul>
+  <p class="fw-bold fs-5">Total: $<span id="totalCarrito">0</span></p>
+  <div class="mb-3">
+    <button class="btn btn-warning" onclick="vaciarCarrito()">Vaciar carrito</button>
+  </div>
+  <form id="pedidoForm">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input type="text" id="nombreInput" class="form-control" placeholder="Tu nombre" required />
+      </div>
+      <div class="col-md-6">
+        <input type="email" id="gmailInput" class="form-control" placeholder="Tu Gmail" required />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success">Enviar pedido por WhatsApp</button>
+  </form>
+</section>

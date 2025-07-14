@@ -1,0 +1,22 @@
+<section id="producto-detalle" class="container py-5" style="display:none;">
+  <button class="btn btn-secondary mb-4" onclick="volverAlCatalogo()">← Volver al catálogo</button>
+  <div class="row">
+    <div class="col-md-6">
+      <div id="detalleCarrusel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" id="carouselInner"></div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#detalleCarrusel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#detalleCarrusel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2 id="detalleTitulo"></h2>
+      <p id="detalleDescripcion"></p>
+      <p class="fw-bold text-success fs-4" id="detallePrecio"></p>
+      <button class="btn btn-success" onclick="agregarAlCarrito()">Agregar al carrito</button>
+    </div>
+  </div>
+</section>

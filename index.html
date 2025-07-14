@@ -9,26 +9,9 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#productos">Jota Diseños</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="menu">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="./contacto.html">Contacto</a></li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" onclick="mostrarCarrito()">🛒 Carrito (<span id="carritoCantidad">0</span>)</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div id="navbar"></div>
 
-  <!-- HERO -->
+  <!-- Hero principal -->
   <header class="bg-primary text-white text-center py-5">
     <div class="container">
       <h1>Diseños únicos en tazas y remeras</h1>
@@ -36,90 +19,10 @@
     </div>
   </header>
 
-  <!-- PRODUCTOS -->
-  <section id="productos" class="container py-5">
-    <h2 class="text-center mb-4">Nuestros productos</h2>
-    <div class="row g-4">
-      <!-- Producto 1 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="./Tazas/uno.jpg" class="card-img-top" alt="Taza personalizada" />
-          <div class="card-body">
-            <h5 class="card-title">Taza "Coder"</h5>
-            <p class="card-text">Diseño ideal para programadores.</p>
-            <p class="text-success fw-bold">$3.000</p>
-            <a href="#" class="btn btn-primary" 
-               onclick="mostrarDetalle('Taza Coder', 'Taza de cerámica para programadores.', ['./Tazas/uno.jpg','./Tazas/dos.jpg','./Tazas/tres.jpg'], 3000)">Encargar</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Producto 2 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="./Remeras/uno.jpg" class="card-img-top" alt="Remera personalizada" />
-          <div class="card-body">
-            <h5 class="card-title">Remera "Frontend Lover"</h5>
-            <p class="card-text">Para los fans de HTML, CSS y café.</p>
-            <p class="text-success fw-bold">$5.500</p>
-            <a href="#" class="btn btn-primary" 
-               onclick="mostrarDetalle('Remera Frontend Lover', 'Remera cómoda con diseño tech.', ['./Remeras/uno.jpg','./Remeras/dos.jpg','./Remeras/tres.jpg'], 5500)">Encargar</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DETALLE -->
-  <section id="producto-detalle" class="container py-5" style="display:none;">
-    <button class="btn btn-secondary mb-4" onclick="volverAlCatalogo()">← Volver al catálogo</button>
-    <div class="row">
-      <div class="col-md-6">
-        <div id="detalleCarrusel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner" id="carouselInner"></div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#detalleCarrusel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#detalleCarrusel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h2 id="detalleTitulo"></h2>
-        <p id="detalleDescripcion"></p>
-        <p class="fw-bold text-success fs-4" id="detallePrecio"></p>
-        <button class="btn btn-success" onclick="agregarAlCarrito()">Agregar al carrito</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- CARRITO -->
-  <section id="carrito" class="container py-5" style="display:none;">
-    <button class="btn btn-secondary mb-4" onclick="volverAlCatalogo()">← Volver al catálogo</button>
-    <h2 class="mb-4">🛒 Carrito de compras</h2>
-    <ul id="listaCarrito" class="list-group mb-3"></ul>
-    <p class="fw-bold fs-5">Total: $<span id="totalCarrito">0</span></p>
-    <div class="mb-3">
-      <button class="btn btn-warning" onclick="vaciarCarrito()">Vaciar carrito</button>
-    </div>
-    <form id="pedidoForm">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <input type="text" id="nombreInput" class="form-control" placeholder="Tu nombre" required />
-        </div>
-        <div class="col-md-6">
-          <input type="email" id="gmailInput" class="form-control" placeholder="Tu Gmail" required />
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">Enviar pedido por WhatsApp</button>
-    </form>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025 Diseños Creativos - Todos los derechos reservados</p>
-  </footer>
+  <div id="productos"></div>
+  <div id="detalle"></div>
+  <div id="carrito"></div>
+  <div id="footer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
