@@ -13,7 +13,9 @@ async function incluirHTML(id, archivo) {
 window.addEventListener('DOMContentLoaded', async () => {
   await incluirHTML('navbar', './partials/navbar.html');
   await incluirHTML('footer', './partials/footer.html');
-  await cargarProductos(); // Cargar productos al inicio
+  cargarCarritoDesdeStorage();
+  await cargarProductos();
+  actualizarContador();
 });
 
 // Variables globales
@@ -27,7 +29,13 @@ async function cargarProductos() {
 
 // Mostrar detalle de un producto
 function mostrarDetalle(titulo, descripcion, imagenes, precio) {
-  productoActual = { titulo, descripcion, imagenes, precio };
+  productoActual = {
+    titulo,
+    descripcion,
+    imagenes,
+    precio: parseFloat(precio),
+    imagenMiniatura: imagenes[0]
+  };
   const contenido = `
     <section id="producto-detalle" class="container py-5">
       <button class="btn btn-secondary mb-4" onclick="volverAlCatalogo()">← Volver al catálogo</button>
@@ -79,19 +87,20 @@ function volverAlCatalogo() {
 
 // Agregar producto al carrito
 function agregarAlCarrito() {
-  if (!productoActual) return alert("Seleccioná un producto.");
+  if (!productoActual) return;
   carrito.push(productoActual);
+  guardarCarritoEnStorage();
   actualizarContador();
   alert(`✅ "${productoActual.titulo}" agregado al carrito.`);
 }
 
-// Actualizar contador del navbar
+// Contador en el navbar
 function actualizarContador() {
   const contador = document.getElementById('carritoCantidad');
   if (contador) contador.textContent = carrito.length;
 }
 
-// Mostrar sección del carrito
+// Mostrar carrito
 function mostrarCarrito() {
   const contenido = `
     <section id="carrito" class="container py-5">
@@ -117,9 +126,10 @@ function mostrarCarrito() {
   `;
   document.getElementById('contenido').innerHTML = contenido;
   actualizarVistaCarrito();
+  document.getElementById('pedidoForm').addEventListener('submit', enviarPedido);
 }
 
-// Mostrar productos en el carrito
+// Mostrar productos en el carrito con imagen
 function actualizarVistaCarrito() {
   const lista = document.getElementById('listaCarrito');
   const totalSpan = document.getElementById('totalCarrito');
@@ -130,26 +140,65 @@ function actualizarVistaCarrito() {
   carrito.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `${item.titulo} - $${item.precio}
+    li.innerHTML = `
+      <div class="d-flex align-items-center gap-3">
+        <img src="${item.imagenMiniatura}" alt="${item.titulo}" width="50" class="rounded" />
+        <span>${item.titulo} - $${item.precio}</span>
+      </div>
       <button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${index})">❌</button>`;
     lista.appendChild(li);
-    total += item.precio;
+    total += parseFloat(item.precio);
   });
-  totalSpan.textContent = total;
+  totalSpan.textContent = total.toFixed(2);
 }
 
-// Eliminar producto del carrito
+// Eliminar producto
 function eliminarDelCarrito(index) {
   carrito.splice(index, 1);
+  guardarCarritoEnStorage();
   actualizarContador();
   actualizarVistaCarrito();
 }
 
-// Vaciar el carrito
+// Vaciar carrito
 function vaciarCarrito() {
   if (confirm("¿Vaciar todo el carrito?")) {
     carrito = [];
+    guardarCarritoEnStorage();
     actualizarContador();
     actualizarVistaCarrito();
+    alert("Carrito vaciado.");
+  }
+}
+
+// Enviar pedido por WhatsApp
+function enviarPedido(event) {
+  event.preventDefault();
+  const nombre = document.getElementById('nombreInput').value;
+  const gmail = document.getElementById('gmailInput').value;
+  if (carrito.length === 0) {
+    alert("El carrito está vacío.");
+    return;
+  }
+
+  let mensaje = `Hola, soy ${nombre} y quiero hacer un pedido:\n\n`;
+  carrito.forEach(item => {
+    mensaje += `- ${item.titulo}: $${item.precio}\n`;
+  });
+  mensaje += `\nTotal: $${carrito.reduce((t, i) => t + i.precio, 0)}\n`;
+  mensaje += `Mi correo: ${gmail}`;
+
+  const url = `https://wa.me/3516175353?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
+// LocalStorage
+function guardarCarritoEnStorage() {
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+function cargarCarritoDesdeStorage() {
+  const data = localStorage.getItem('carrito');
+  if (data) {
+    carrito = JSON.parse(data);
   }
 }
